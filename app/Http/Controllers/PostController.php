@@ -79,10 +79,9 @@ class PostController extends Controller
     {
         $postId = Post::find($id);
         $validator = Validator::make($request->all(), [
-            'title' => 'required|unique:posts,title|max:255|min:5'
+            'title' => 'required|max:255|min:5'
         ], [
             'title.required' => 'Title is required',
-            'title.unique' => 'Title is existed',
             'title.max' => 'Title is too long',
             'title.min' => 'Title is too short',
             ]);
@@ -98,7 +97,6 @@ class PostController extends Controller
                     $postId->title = $request->title;
                     $postId->id_type = $request->type;
                     $postId->content = $request->content;
-                    $postId->title = $request->title;
                     $postId->save();
                 }
                 return redirect('post/getpost')->with('success','Edit successfully');

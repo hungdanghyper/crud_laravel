@@ -43,18 +43,6 @@
             @endif
         </select>
     </div>
-
-    {{-- Category post --}}
-    <div class="form-group">
-        <label>Category</label>
-        <select name="category">
-            @if($cates)
-            @foreach ($cates as $cate)
-            <option @if($postId->types->categories->id==$cate->id){{"selected"}} @endif value="{{$cate->id}}">{{$cate->name}}</option>
-            @endforeach
-            @endif
-        </select>
-    </div>
        
     <div class="form-group">
         <a class="btn btn-success" href="{{route('getpost')}}">Cancel</a>
