@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Post;
 use App\Type;
 use App\Category;
@@ -79,11 +80,20 @@ class PostController extends Controller
     {
         $postId = Post::find($id);
         $validator = Validator::make($request->all(), [
-            'title' => 'required|max:255|min:5'
+            'title' => [
+                'required',
+                'max:255',
+                'min:5',
+                Rule::unique('posts')->ignore($postId->id),
+            ],
+            'content' => 'required|min:10'
         ], [
             'title.required' => 'Title is required',
             'title.max' => 'Title is too long',
             'title.min' => 'Title is too short',
+            'title.unique' => 'Title is existed',
+            'content.required' => 'Content is required',
+            'content.min' => 'Content is too short'
             ]);
             if($validator->fails())
             {

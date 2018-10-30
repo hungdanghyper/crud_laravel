@@ -16,7 +16,8 @@ use App\Post;
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
-
+Route::get('admin/login','UserController@getLogin')->name('getlogin');
+Route::post('admin/login','UserController@postLogin')->name('postlogin');
 Route::group(['prefix' => 'category'], function() {
     Route::get('getcate','CategoryController@getcate')->name('getcate');
     Route::get('create','CategoryController@createcate')->name('createcate');
