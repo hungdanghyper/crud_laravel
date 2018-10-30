@@ -21,21 +21,33 @@
 @if($postId)    
 <form method="post" action="{{route('updatepost',$postId->id)}}" enctype="multipart/form-data">
     @csrf
-        {{-- Title post --}}
+    {{-- Title post --}}
     <div class="form-group">
         <label>Title</label>
         <input type="text" class="form-control" name="title" value="{{ $postId->title }}">
     </div>
-        {{-- Content post --}}
+    {{-- Content post --}}
     <div class="form-group">
         <label>Content</label>
         <textarea class="form-control" type="text" rows="8" name="content">{{ $postId->content }}</textarea>
     </div>
-
-        {{-- Type post --}}
+    
+    {{-- Category post --}}
+    <div class="form-group">
+        <label>Category</label>
+        <select name="category" id="category">
+            @if($cates)
+            @foreach ($cates as $cate)
+            <option @if($postId->types->categories->id==$cate->id){{"selected"}} @endif value="{{$cate->id}}">{{$cate->name}}</option>
+            @endforeach
+            @endif
+        </select>
+    </div>
+    
+    {{-- Type post --}}
     <div class="form-group">
         <label>Type</label>
-        <select name="type">
+        <select name="type" id="type">
             @if($types)
             @foreach ($types as $type)
             <option @if($type->id==$postId->id_type){{"selected"}} @endif value="{{$type->id}}">{{$type->name}}</option>
@@ -43,7 +55,7 @@
             @endif
         </select>
     </div>
-       
+    
     <div class="form-group">
         <a class="btn btn-success" href="{{route('getpost')}}">Cancel</a>
         <button type="submit" class="btn btn-primary">Submit</button>
@@ -53,34 +65,36 @@
 @else   {{-- Add Post --}}
 <form method="post" action="{{route('storepost')}}" enctype="multipart/form-data">
     @csrf
-     {{-- ADD Title --}}
+    {{-- ADD Title --}}
     <div class="form-group">
         <label>Title</label>
         <input type="text" class="form-control" name="title" value="{{ old('title') }}">
     </div>
-        {{-- Add Content --}}
+    {{-- Add Content --}}
     <div class="form-group">
         <label>Content</label>
         <textarea class="form-control" rows="8" name="content" value="{{ old('content') }}"></textarea>
     </div>
-        {{--  Add Type --}}
+    
+    {{-- Add Category --}}
     <div class="form-group">
-        <label>Type</label>
-        <select name="type">
-            @if($types)
-            @foreach ($types as $type)
-            <option value="{{$type->id}}">{{$type->name}}</option>
+        <label>Category</label>
+        <select name="category" id="category">
+            @if($cates)
+            @foreach ($cates as $cate)
+            <option value="{{$cate->id}}">{{$cate->name}}</option>
             @endforeach
             @endif
         </select>
     </div>
-     {{-- Add Category --}}
+    
+    {{--  Add Type --}}
     <div class="form-group">
-        <label>Category</label>
-        <select name="category">
-            @if($cates)
-            @foreach ($cates as $cate)
-            <option value="{{$cate->id}}">{{$cate->name}}</option>
+        <label>Type</label>
+        <select name="type" id="type">
+            @if($types)
+            @foreach ($types as $type)
+            <option value="{{$type->id}}">{{$type->name}}</option>
             @endforeach
             @endif
         </select>
@@ -91,5 +105,17 @@
     </div>
 </form>
 @endif
+@endsection
 
+@section('script')
+<script>
+    $(function(){
+        $("#category").change(function(){
+            var idCategory = $(this).val();
+            $.get("/ajax/category/"+idCategory,function(data){
+                $("#type").html(data);
+            })
+        })
+    });
+</script>
 @endsection

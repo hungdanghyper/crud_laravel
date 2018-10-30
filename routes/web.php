@@ -46,3 +46,8 @@ Route::group(['prefix'=>'post'], function(){
     Route::post('update/{id}','PostController@updatepost')->name('updatepost');
     Route::get('destroy/{id}','Postcontroller@destroypost')->name('destroypost');
 });
+
+Route::group(['prefix' => 'ajax'], function() {
+    Route::get('category/{idCategory}','AjaxController@getType');
+});
+
